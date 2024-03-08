@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TodoListItems from './TodoListItems';
 import AddIcon from '../component/assets/img/button.png';
 
+//TO GET DATA FROM LOCALSTORAGE 
+const getLocalItems = () => {
+  let list = localStorage.getItem('lists');
+
+  if (list) {
+    return JSON.parse(localStorage.getItem('lists'))
+  }
+  else {
+    return [];
+  }
+}
 
 function TodoItem() {
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(getLocalItems());
   const [todoName, setTodoName] = useState('');
 
   const addTodoList = (event) => {
@@ -34,6 +45,11 @@ function TodoItem() {
       setTodoList={setTodoList}
     />
   ));
+
+  //add useEffect for localstorage 
+  useEffect(() => {
+    localStorage.setItem('lists', JSON.stringify(todoList))
+  }, [todoList])
 
   return (
     <div className='pt-4'>
